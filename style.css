@@ -143,6 +143,8 @@ input, select, textarea { font-family: inherit; font-size: 13px; }
 .btn-text { background: none; color: #a39d8c; }
 .btn-text:hover { color: #fff; }
 .btn-small { padding: 4px 9px; font-size: 12px; border-radius: 5px; }
+.btn-subtle { background: var(--surface); color: var(--ink-muted); border-color: var(--border); }
+.btn-subtle:hover { background: var(--bg); color: var(--ink); border-color: var(--ink-faint); }
 
 main { padding: 24px; max-width: 1440px; margin: 0 auto; }
 .view { display: none; }
@@ -183,15 +185,18 @@ main { padding: 24px; max-width: 1440px; margin: 0 auto; }
 .filter-bar select { min-width: 130px; }
 
 /* ===== Tracker table ===== */
-.table-scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card); }
-.tracker-table { min-width: 2000px; font-size: 12.5px; table-layout: auto; }
-.tracker-table th { position: sticky; top: 0; background: #fbfaf7; z-index: 2; white-space: nowrap; cursor: pointer; user-select: none; }
+.table-scroll {
+  overflow: auto; max-height: calc(100vh - 230px); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card);
+}
+.tracker-table { min-width: 2050px; font-size: 12.5px; table-layout: auto; }
+.tracker-table th { position: sticky; top: 0; background: #fbfaf7; z-index: 3; white-space: nowrap; cursor: pointer; user-select: none; }
 .tracker-table th:hover { background: #f3f0e8; }
 .tracker-table th:last-child { cursor: default; }
 .tracker-table th:last-child:hover { background: #fbfaf7; }
 .sort-arrow { display: inline-block; width: 12px; font-size: 10px; color: var(--accent); }
 .filter-row th {
-  position: sticky; top: 33px; z-index: 1; cursor: default; background: var(--surface);
+  position: sticky; top: 33px; z-index: 3; cursor: default; background: var(--surface);
   padding: 4px 6px; border-bottom: 1px solid var(--border);
 }
 .filter-row th:hover { background: var(--surface); }
@@ -202,6 +207,19 @@ main { padding: 24px; max-width: 1440px; margin: 0 auto; }
 .filter-row input:focus, .filter-row select:focus { border-color: var(--accent); background: var(--surface); }
 .filter-row input::placeholder { color: var(--ink-faint); }
 .tracker-table td { padding: 5px 8px; vertical-align: top; }
+
+/* Frozen columns: Sr No, Firm, Customer Name stay put while the rest scrolls */
+.tracker-table th:nth-child(1), .tracker-table td:nth-child(1) { position: sticky; left: 0; width: 52px; min-width: 52px; }
+.tracker-table th:nth-child(2), .tracker-table td:nth-child(2) { position: sticky; left: 52px; width: 190px; min-width: 190px; }
+.tracker-table th:nth-child(3), .tracker-table td:nth-child(3) { position: sticky; left: 242px; min-width: 220px; }
+.tracker-table td:nth-child(1), .tracker-table td:nth-child(2), .tracker-table td:nth-child(3) {
+  z-index: 1; background: var(--surface);
+}
+.tracker-table thead th:nth-child(1), .tracker-table thead th:nth-child(2), .tracker-table thead th:nth-child(3) { z-index: 4; }
+.tracker-table th:nth-child(3), .tracker-table td:nth-child(3) {
+  box-shadow: 4px 0 6px -4px rgba(33, 31, 26, 0.18);
+}
+
 .tracker-table .col-name { min-width: 220px; }
 .tracker-table .col-firm { min-width: 190px; }
 .tracker-table .col-mobile { min-width: 190px; }
@@ -221,9 +239,24 @@ main { padding: 24px; max-width: 1440px; margin: 0 auto; }
 }
 .tracker-table td.readonly { color: var(--ink-muted); font-family: var(--font-mono); white-space: nowrap; }
 .tracker-table .name-cell textarea { font-weight: 600; }
-.tracker-table .row-dirty { background: #fffaf0; }
 .tracker-table .del-btn { background: none; border: none; color: var(--ink-faint); font-size: 15px; padding: 2px 6px; border-radius: 4px; }
 .tracker-table .del-btn:hover { color: var(--critical); background: var(--critical-bg); }
+
+/* Row tint by Status — Pending Follow-up stays neutral/white */
+.tracker-table tr.status-payment-expected { background: #eaf2fb; }
+.tracker-table tr.status-partial-received { background: #fdf3df; }
+.tracker-table tr.status-no-response { background: #fbe9e9; }
+.tracker-table tr.status-disputed { background: #fce4d3; }
+.tracker-table tr.status-settled { background: #e9f5e6; }
+/* Frozen columns have their own opaque background, so mirror the tint there too */
+.tracker-table tr.status-payment-expected td:nth-child(1), .tracker-table tr.status-payment-expected td:nth-child(2), .tracker-table tr.status-payment-expected td:nth-child(3) { background: #eaf2fb; }
+.tracker-table tr.status-partial-received td:nth-child(1), .tracker-table tr.status-partial-received td:nth-child(2), .tracker-table tr.status-partial-received td:nth-child(3) { background: #fdf3df; }
+.tracker-table tr.status-no-response td:nth-child(1), .tracker-table tr.status-no-response td:nth-child(2), .tracker-table tr.status-no-response td:nth-child(3) { background: #fbe9e9; }
+.tracker-table tr.status-disputed td:nth-child(1), .tracker-table tr.status-disputed td:nth-child(2), .tracker-table tr.status-disputed td:nth-child(3) { background: #fce4d3; }
+.tracker-table tr.status-settled td:nth-child(1), .tracker-table tr.status-settled td:nth-child(2), .tracker-table tr.status-settled td:nth-child(3) { background: #e9f5e6; }
+/* An unsaved edit always wins over the status tint, on any column */
+.tracker-table tr.row-dirty { background: #fffaf0; }
+.tracker-table tr.row-dirty td:nth-child(1), .tracker-table tr.row-dirty td:nth-child(2), .tracker-table tr.row-dirty td:nth-child(3) { background: #fffaf0; }
 
 .badge { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 11px; font-weight: 600; white-space: nowrap; }
 .badge-critical { color: var(--critical); background: var(--critical-bg); }
