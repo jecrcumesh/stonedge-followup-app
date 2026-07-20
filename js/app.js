@@ -375,6 +375,16 @@ function autoGrow(el) {
   el.style.height = el.scrollHeight + "px";
 }
 
+// If the web font (IBM Plex Sans) is still downloading when a row is first
+// measured, text wraps using the fallback font, then re-wraps differently
+// once the real font swaps in — leaving the box sized for the wrong font.
+// Re-measure everything currently on screen once fonts are actually ready.
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    $$("#tracker-tbody textarea[data-autogrow]").forEach(autoGrow);
+  });
+}
+
 function textInput(val, field) {
   return `<input type="text" data-field="${field}" value="${escapeHtml(val || "")}" />`;
 }
