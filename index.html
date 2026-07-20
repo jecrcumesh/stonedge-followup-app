@@ -102,11 +102,24 @@
         <table class="data-table tracker-table" id="tracker-table">
           <thead>
             <tr>
-              <th>Sr No</th><th>Firm</th><th>Customer Name</th><th>Mobile No</th><th>Email ID</th>
-              <th class="num">Amount Outstanding</th><th>Invoice Date</th><th>Credit Days</th>
-              <th>Due Date</th><th class="num">Days Overdue</th><th>Ageing Bucket</th>
-              <th>Status</th><th>Priority</th><th>Next Follow-up</th><th>Last Follow-up</th>
-              <th>Followed Up By</th><th>Last Remark / Notes</th><th></th>
+              <th data-sort-key="srNo">Sr No<span class="sort-arrow"></span></th>
+              <th data-sort-key="firm">Firm<span class="sort-arrow"></span></th>
+              <th class="col-name" data-sort-key="customerName">Customer Name<span class="sort-arrow"></span></th>
+              <th class="col-mobile" data-sort-key="mobileNo">Mobile No<span class="sort-arrow"></span></th>
+              <th class="col-email" data-sort-key="emailId">Email ID<span class="sort-arrow"></span></th>
+              <th class="num" data-sort-key="amountOutstanding">Amount Outstanding<span class="sort-arrow"></span></th>
+              <th data-sort-key="invoiceDate">Invoice Date<span class="sort-arrow"></span></th>
+              <th data-sort-key="creditDays">Credit Days<span class="sort-arrow"></span></th>
+              <th data-sort-key="dueDate">Due Date<span class="sort-arrow"></span></th>
+              <th class="num" data-sort-key="daysOverdue">Days Overdue<span class="sort-arrow"></span></th>
+              <th data-sort-key="ageingBucket">Ageing Bucket<span class="sort-arrow"></span></th>
+              <th data-sort-key="status">Status<span class="sort-arrow"></span></th>
+              <th data-sort-key="priority">Priority<span class="sort-arrow"></span></th>
+              <th data-sort-key="lastFollowupDate">Last Follow-up<span class="sort-arrow"></span></th>
+              <th data-sort-key="nextFollowupDate">Next Follow-up<span class="sort-arrow"></span></th>
+              <th data-sort-key="followedUpBy">Followed Up By<span class="sort-arrow"></span></th>
+              <th class="col-remark" data-sort-key="remark">Last Remark / Notes<span class="sort-arrow"></span></th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="tracker-tbody"></tbody>
