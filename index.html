@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stonedge — Followup Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="login-screen" class="screen">
+  <div class="login-card">
+    <div class="login-mark">SG</div>
+    <h1>Stonedge Followup Tracker</h1>
+    <p class="login-sub">Sign in with a GitHub token that has access to the tracker's data repo.</p>
+
+    <form id="login-form">
+      <label for="pat-input">GitHub token</label>
+      <input id="pat-input" type="password" autocomplete="off" placeholder="ghp_... or github_pat_..." required />
+
+      <label for="name-input">Your name</label>
+      <input id="name-input" type="text" autocomplete="off" placeholder="e.g. Vinod" required />
+
+      <label class="checkbox-row">
+        <input id="remember-input" type="checkbox" />
+        <span>Keep me signed in on this device</span>
+      </label>
+
+      <button type="submit" id="login-btn">Connect</button>
+      <p id="login-error" class="error-text" hidden></p>
+    </form>
+    <p class="login-hint">No token yet? See the README for how to create one — it only needs access to the private data repo, nothing else.</p>
+  </div>
+</div>
+
+<!-- ============ APP SCREEN ============ -->
+<div id="app-screen" class="screen" hidden>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark">SG</span>
+      <span class="brand-name">Followup Tracker</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-view="dashboard">Dashboard</button>
+      <button class="tab-btn" data-view="tracker">Followup Tracker</button>
+    </nav>
+    <div class="header-actions">
+      <span id="sync-status" class="sync-status"></span>
+      <button id="export-btn" class="btn btn-ghost">Export to Excel</button>
+      <button id="save-btn" class="btn btn-primary" disabled>Save changes</button>
+      <button id="logout-btn" class="btn btn-text">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ---------- DASHBOARD VIEW ---------- -->
+    <section id="dashboard-view" class="view active">
+      <div class="metric-grid" id="metric-grid"></div>
+
+      <div class="panel-grid">
+        <div class="panel">
+          <h2>Status breakdown</h2>
+          <table class="data-table" id="status-table">
+            <thead><tr><th>Status</th><th>Customers</th><th>Outstanding</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h2>Top 5 outstanding customers</h2>
+          <table class="data-table" id="top5-table">
+            <thead><tr><th>#</th><th>Customer</th><th>Firm</th><th>Outstanding</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- TRACKER VIEW ---------- -->
+    <section id="tracker-view" class="view">
+      <div class="filter-bar">
+        <input id="search-input" type="search" placeholder="Search customer or remark…" />
+        <select id="firm-filter"><option value="">All firms</option></select>
+        <select id="status-filter"><option value="">All statuses</option></select>
+        <select id="priority-filter">
+          <option value="">All priorities</option>
+          <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+        </select>
+        <select id="ageing-filter">
+          <option value="">All ageing</option>
+          <option>Not Due</option><option>0-30 Days</option><option>31-60 Days</option>
+          <option>61-90 Days</option><option>90+ Days</option><option>Set Invoice Date</option>
+        </select>
+        <span class="filter-count" id="filter-count"></span>
+        <button id="add-customer-btn" class="btn btn-primary">+ Add customer</button>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data-table tracker-table" id="tracker-table">
+          <thead>
+            <tr>
+              <th>Sr No</th><th>Firm</th><th>Customer Name</th><th>Mobile No</th><th>Email ID</th>
+              <th class="num">Amount Outstanding</th><th>Invoice Date</th><th>Credit Days</th>
+              <th>Due Date</th><th class="num">Days Overdue</th><th>Ageing Bucket</th>
+              <th>Status</th><th>Priority</th><th>Next Follow-up</th><th>Last Follow-up</th>
+              <th>Followed Up By</th><th>Last Remark / Notes</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="tracker-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/github-api.js"></script>
+<script src="js/export.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
