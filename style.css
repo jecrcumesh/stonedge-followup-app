@@ -205,7 +205,8 @@ main { padding: 24px; max-width: 1440px; margin: 0 auto; }
 .tracker-table .col-name { min-width: 220px; }
 .tracker-table .col-firm { min-width: 190px; }
 .tracker-table .col-mobile { min-width: 190px; }
-.tracker-table .col-email { min-width: 170px; }
+.tracker-table .col-email { min-width: 200px; }
+.tracker-table .col-status { min-width: 160px; }
 .tracker-table .col-remark { min-width: 320px; }
 .tracker-table input, .tracker-table select, .tracker-table textarea {
   width: 100%; border: 1px solid transparent; border-radius: 4px; padding: 5px 6px;
