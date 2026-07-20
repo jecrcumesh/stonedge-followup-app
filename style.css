@@ -184,19 +184,30 @@ main { padding: 24px; max-width: 1440px; margin: 0 auto; }
 
 /* ===== Tracker table ===== */
 .table-scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card); }
-.tracker-table { min-width: 1720px; font-size: 12.5px; }
-.tracker-table th { position: sticky; top: 0; background: #fbfaf7; z-index: 1; white-space: nowrap; }
+.tracker-table { min-width: 2000px; font-size: 12.5px; table-layout: auto; }
+.tracker-table th { position: sticky; top: 0; background: #fbfaf7; z-index: 1; white-space: nowrap; cursor: pointer; user-select: none; }
+.tracker-table th:hover { background: #f3f0e8; }
+.tracker-table th:last-child { cursor: default; }
+.tracker-table th:last-child:hover { background: #fbfaf7; }
+.sort-arrow { display: inline-block; width: 12px; font-size: 10px; color: var(--accent); }
 .tracker-table td { padding: 5px 8px; vertical-align: top; }
+.tracker-table .col-name { min-width: 220px; }
+.tracker-table .col-mobile { min-width: 190px; }
+.tracker-table .col-email { min-width: 170px; }
+.tracker-table .col-remark { min-width: 320px; }
 .tracker-table input, .tracker-table select, .tracker-table textarea {
   width: 100%; border: 1px solid transparent; border-radius: 4px; padding: 5px 6px;
-  background: transparent; font-size: 12.5px; color: var(--ink);
+  background: transparent; font-size: 12.5px; color: var(--ink); box-sizing: border-box;
 }
 .tracker-table input:hover, .tracker-table select:hover, .tracker-table textarea:hover { border-color: var(--border); }
 .tracker-table input:focus, .tracker-table select:focus, .tracker-table textarea:focus { border-color: var(--accent); background: var(--surface); }
-.tracker-table input[type="number"] { font-family: var(--font-mono); text-align: right; }
-.tracker-table textarea { resize: vertical; min-height: 32px; font-family: inherit; }
+.tracker-table input[data-amount] { font-family: var(--font-mono); text-align: right; }
+.tracker-table textarea {
+  resize: none; overflow: hidden; font-family: inherit; line-height: 1.4;
+  min-height: 30px; display: block;
+}
 .tracker-table td.readonly { color: var(--ink-muted); font-family: var(--font-mono); white-space: nowrap; }
-.tracker-table .name-cell input { font-weight: 600; }
+.tracker-table .name-cell textarea { font-weight: 600; }
 .tracker-table .row-dirty { background: #fffaf0; }
 .tracker-table .del-btn { background: none; border: none; color: var(--ink-faint); font-size: 15px; padding: 2px 6px; border-radius: 4px; }
 .tracker-table .del-btn:hover { color: var(--critical); background: var(--critical-bg); }
