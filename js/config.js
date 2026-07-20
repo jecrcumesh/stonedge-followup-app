@@ -5,7 +5,7 @@
  */
 const APP_CONFIG = {
   dataOwner: "YOUR_GITHUB_USERNAME_OR_ORG", // e.g. "umesh-stonedge"
-  dataRepo: "stonedge-followup-data", // the PRIVATE repo holding tracker.json
+  dataRepo: "jecrcumesh", // the PRIVATE repo holding tracker.json
   dataBranch: "main",
   dataPath: "tracker.json",
   appName: "Stonedge Followup Tracker",
