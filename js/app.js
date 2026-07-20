@@ -323,6 +323,10 @@ function getFilteredCustomers() {
 function priorityBadgeClass(p) {
   return { Critical: "critical", High: "high", Medium: "medium", Low: "low" }[p] || "neutral";
 }
+function statusSlug(status) {
+  const s = String(status || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return s ? `status-${s}` : "";
+}
 function ageingBadgeClass(a) {
   if (a === "90+ Days") return "critical";
   if (a === "61-90 Days") return "high";
@@ -342,6 +346,7 @@ function renderTracker() {
     const d = deriveFields(c);
     const tr = document.createElement("tr");
     tr.dataset.idx = idx;
+    tr.className = statusSlug(c.status);
 
     tr.innerHTML = `
       <td class="readonly">${c.srNo ?? ""}</td>
@@ -419,6 +424,11 @@ $("#tracker-tbody").addEventListener("input", (e) => {
   c[field] = val;
   markDirty();
   tr.classList.add("row-dirty");
+  if (field === "status") {
+    Array.from(tr.classList).filter((cls) => cls.startsWith("status-")).forEach((cls) => tr.classList.remove(cls));
+    const slug = statusSlug(c.status);
+    if (slug) tr.classList.add(slug);
+  }
   if (e.target.tagName === "TEXTAREA") autoGrow(e.target);
   // Live-update derived cells for this row without a full re-render (preserves focus)
   if (["invoiceDate", "creditDays", "amountOutstanding", "status"].includes(field)) {
