@@ -83,18 +83,8 @@
     <section id="tracker-view" class="view">
       <div class="filter-bar">
         <input id="search-input" type="search" placeholder="Search customer or remark…" />
-        <select id="firm-filter"><option value="">All firms</option></select>
-        <select id="status-filter"><option value="">All statuses</option></select>
-        <select id="priority-filter">
-          <option value="">All priorities</option>
-          <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
-        </select>
-        <select id="ageing-filter">
-          <option value="">All ageing</option>
-          <option>Not Due</option><option>0-30 Days</option><option>31-60 Days</option>
-          <option>61-90 Days</option><option>90+ Days</option><option>Set Invoice Date</option>
-        </select>
         <span class="filter-count" id="filter-count"></span>
+        <button id="clear-filters-btn" class="btn btn-ghost btn-small">Clear column filters</button>
         <button id="add-customer-btn" class="btn btn-primary">+ Add customer</button>
       </div>
 
@@ -102,11 +92,55 @@
         <table class="data-table tracker-table" id="tracker-table">
           <thead>
             <tr>
-              <th>Sr No</th><th>Firm</th><th>Customer Name</th><th>Mobile No</th><th>Email ID</th>
-              <th class="num">Amount Outstanding</th><th>Invoice Date</th><th>Credit Days</th>
-              <th>Due Date</th><th class="num">Days Overdue</th><th>Ageing Bucket</th>
-              <th>Status</th><th>Priority</th><th>Next Follow-up</th><th>Last Follow-up</th>
-              <th>Followed Up By</th><th>Last Remark / Notes</th><th></th>
+              <th data-sort-key="srNo">Sr No<span class="sort-arrow"></span></th>
+              <th class="col-firm" data-sort-key="firm">Firm<span class="sort-arrow"></span></th>
+              <th class="col-name" data-sort-key="customerName">Customer Name<span class="sort-arrow"></span></th>
+              <th class="col-mobile" data-sort-key="mobileNo">Mobile No<span class="sort-arrow"></span></th>
+              <th class="col-email" data-sort-key="emailId">Email ID<span class="sort-arrow"></span></th>
+              <th class="num" data-sort-key="amountOutstanding">Amount Outstanding<span class="sort-arrow"></span></th>
+              <th data-sort-key="invoiceDate">Invoice Date<span class="sort-arrow"></span></th>
+              <th data-sort-key="creditDays">Credit Days<span class="sort-arrow"></span></th>
+              <th data-sort-key="dueDate">Due Date<span class="sort-arrow"></span></th>
+              <th class="num" data-sort-key="daysOverdue">Days Overdue<span class="sort-arrow"></span></th>
+              <th data-sort-key="ageingBucket">Ageing Bucket<span class="sort-arrow"></span></th>
+              <th data-sort-key="status">Status<span class="sort-arrow"></span></th>
+              <th data-sort-key="priority">Priority<span class="sort-arrow"></span></th>
+              <th data-sort-key="lastFollowupDate">Last Follow-up<span class="sort-arrow"></span></th>
+              <th data-sort-key="nextFollowupDate">Next Follow-up<span class="sort-arrow"></span></th>
+              <th data-sort-key="followedUpBy">Followed Up By<span class="sort-arrow"></span></th>
+              <th class="col-remark" data-sort-key="remark">Last Remark / Notes<span class="sort-arrow"></span></th>
+              <th></th>
+            </tr>
+            <tr class="filter-row" id="filter-row">
+              <th></th>
+              <th><select data-filter-key="firm"><option value="">All</option></select></th>
+              <th><input type="text" data-filter-key="customerName" placeholder="Filter…" /></th>
+              <th><input type="text" data-filter-key="mobileNo" placeholder="Filter…" /></th>
+              <th><input type="text" data-filter-key="emailId" placeholder="Filter…" /></th>
+              <th><input type="text" data-filter-key="amountOutstanding" placeholder="Filter…" /></th>
+              <th><input type="text" data-filter-key="invoiceDate" placeholder="dd/mm/yyyy" /></th>
+              <th><input type="text" data-filter-key="creditDays" placeholder="Filter…" /></th>
+              <th><input type="text" data-filter-key="dueDate" placeholder="dd/mm/yyyy" /></th>
+              <th><input type="text" data-filter-key="daysOverdue" placeholder="Filter…" /></th>
+              <th>
+                <select data-filter-key="ageingBucket">
+                  <option value="">All</option>
+                  <option>Not Due</option><option>0-30 Days</option><option>31-60 Days</option>
+                  <option>61-90 Days</option><option>90+ Days</option><option>Set Invoice Date</option>
+                </select>
+              </th>
+              <th><select data-filter-key="status"><option value="">All</option></select></th>
+              <th>
+                <select data-filter-key="priority">
+                  <option value="">All</option>
+                  <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+                </select>
+              </th>
+              <th><input type="text" data-filter-key="lastFollowupDate" placeholder="dd/mm/yyyy" /></th>
+              <th><input type="text" data-filter-key="nextFollowupDate" placeholder="dd/mm/yyyy" /></th>
+              <th><input type="text" data-filter-key="followedUpBy" placeholder="Filter…" /></th>
+              <th><input type="text" data-filter-key="remark" placeholder="Filter…" /></th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="tracker-tbody"></tbody>
