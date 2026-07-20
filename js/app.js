@@ -251,27 +251,61 @@ function escapeHtml(str) {
 
 /* ---------------- Rendering: Tracker table ---------------- */
 function populateFilterOptions() {
-  const firmSel = $("#firm-filter");
-  const statusSel = $("#status-filter");
+  const firmSel = $('#filter-row [data-filter-key="firm"]');
+  const statusSel = $('#filter-row [data-filter-key="status"]');
   firmSel.querySelectorAll("option:not(:first-child)").forEach((o) => o.remove());
   statusSel.querySelectorAll("option:not(:first-child)").forEach((o) => o.remove());
   state.meta.firms.forEach((f) => firmSel.insertAdjacentHTML("beforeend", `<option>${escapeHtml(f)}</option>`));
   state.meta.statuses.forEach((s) => statusSel.insertAdjacentHTML("beforeend", `<option>${escapeHtml(s)}</option>`));
 }
 
+function displayDate(iso) {
+  if (!iso) return "";
+  const [y, m, d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+// One filter box per column, in addition to the free-text search box.
+const columnFilters = {
+  firm: "", customerName: "", mobileNo: "", emailId: "", amountOutstanding: "",
+  invoiceDate: "", creditDays: "", dueDate: "", daysOverdue: "", ageingBucket: "",
+  status: "", priority: "", lastFollowupDate: "", nextFollowupDate: "",
+  followedUpBy: "", remark: "",
+};
+const SELECT_FILTER_KEYS = new Set(["firm", "status", "priority", "ageingBucket"]);
+const FILTER_EXTRACTORS = {
+  firm: (c) => c.firm || "",
+  customerName: (c) => c.customerName || "",
+  mobileNo: (c) => c.mobileNo || "",
+  emailId: (c) => c.emailId || "",
+  amountOutstanding: (c) => formatAmount(c.amountOutstanding),
+  invoiceDate: (c) => displayDate(c.invoiceDate),
+  creditDays: (c) => String(c.creditDays ?? ""),
+  dueDate: (c) => displayDate(deriveFields(c).dueDate),
+  daysOverdue: (c) => { const d = deriveFields(c).daysOverdue; return d === "" ? "" : String(d); },
+  ageingBucket: (c) => deriveFields(c).ageingBucket,
+  status: (c) => c.status || "",
+  priority: (c) => deriveFields(c).priority,
+  lastFollowupDate: (c) => displayDate(c.lastFollowupDate),
+  nextFollowupDate: (c) => displayDate(c.nextFollowupDate),
+  followedUpBy: (c) => c.followedUpBy || "",
+  remark: (c) => c.remark || "",
+};
+
 function getFilteredCustomers() {
   const q = $("#search-input").value.trim().toLowerCase();
-  const firm = $("#firm-filter").value;
-  const status = $("#status-filter").value;
-  const priority = $("#priority-filter").value;
-  const ageing = $("#ageing-filter").value;
   const filtered = state.customers.filter((c) => {
-    if (firm && c.firm !== firm) return false;
-    if (status && c.status !== status) return false;
     if (q && !`${c.customerName || ""} ${c.remark || ""}`.toLowerCase().includes(q)) return false;
-    const derived = deriveFields(c);
-    if (priority && derived.priority !== priority) return false;
-    if (ageing && derived.ageingBucket !== ageing) return false;
+    for (const key in columnFilters) {
+      const filterVal = columnFilters[key];
+      if (!filterVal) continue;
+      const actual = FILTER_EXTRACTORS[key] ? FILTER_EXTRACTORS[key](c) : "";
+      if (SELECT_FILTER_KEYS.has(key)) {
+        if (actual !== filterVal) return false;
+      } else if (!String(actual).toLowerCase().includes(filterVal.toLowerCase())) {
+        return false;
+      }
+    }
     return true;
   });
   if (sortState.key && SORT_EXTRACTORS[sortState.key]) {
@@ -410,9 +444,24 @@ $("#tracker-tbody").addEventListener("click", (e) => {
 });
 
 /* ---------------- Filters ---------------- */
-["search-input", "firm-filter", "status-filter", "priority-filter", "ageing-filter"].forEach((id) => {
-  $(`#${id}`).addEventListener("input", renderTracker);
-  $(`#${id}`).addEventListener("change", renderTracker);
+$("#search-input").addEventListener("input", renderTracker);
+
+$("#filter-row").addEventListener("input", (e) => {
+  const key = e.target.dataset.filterKey;
+  if (!key) return;
+  columnFilters[key] = e.target.value;
+  renderTracker();
+});
+$("#filter-row").addEventListener("change", (e) => {
+  const key = e.target.dataset.filterKey;
+  if (!key) return;
+  columnFilters[key] = e.target.value;
+  renderTracker();
+});
+$("#clear-filters-btn").addEventListener("click", () => {
+  Object.keys(columnFilters).forEach((k) => (columnFilters[k] = ""));
+  $$("#filter-row input, #filter-row select").forEach((el) => (el.value = ""));
+  renderTracker();
 });
 
 /* ---------------- Add customer ---------------- */
